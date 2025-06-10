@@ -1,7 +1,9 @@
 import http from "http";
 import { readFile, writeFile } from "fs/promises";
 import path from "path"
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3007;
 
 const serveFile = async (res, filePath, contentType) => {
@@ -36,11 +38,11 @@ const saveToFile = async (DATA_FILE, links) => {
 }
 
 const server = http.createServer(async (req, res) => {
-    const DATA_FILE = path.join("../", "data", "links.json")
+    const DATA_FILE = path.join(__dirname, "..", "data", "links.json")
 
     if (req.method === "GET") {
         if (req.url === "/") {
-            const filePath = path.join("../", "public", "index.html")
+            const filePath = path.join(__dirname, "..", "public", "index.html")
             serveFile(res, filePath, "text/html")
         } else if (req.url === "/links") {
             const links = await loadLinks(DATA_FILE);
@@ -70,12 +72,12 @@ const server = http.createServer(async (req, res) => {
             const links = await loadLinks(DATA_FILE);
 
             if (!url) {
-                res.writeHead(400, { "Content-Type": "plain/text" });
+                res.writeHead(400, { "Content-Type": "text/plain" });
                 return res.end("URL is required!!");
             }
 
             if (links[shortCode]) {
-                res.writeHead(400, { "Content-Type": "plain/text" });
+                res.writeHead(400, { "Content-Type": "text/plain" });
                 return res.end("ShortCode already exists please select another!!");
             }
 
