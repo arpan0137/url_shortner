@@ -2,7 +2,7 @@ import http from "http";
 import { readFile, writeFile } from "fs/promises";
 import path from "path"
 
-const PORT = 3007;
+const PORT = process.env.PORT || 3007;
 
 const serveFile = async (res, filePath, contentType) => {
     try {
@@ -89,6 +89,6 @@ const server = http.createServer(async (req, res) => {
     }
 })
 
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running at port http://localhost:${PORT}`);
 })
